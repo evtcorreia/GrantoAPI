@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Granto.Data
 {
-    public class AppContext : DbContext
+    public class AppGrantoContext : DbContext
     {
-        public AppContext(DbContextOptions<AppContext> opts) : base(opts)
+        public AppGrantoContext(DbContextOptions<AppGrantoContext> opt) : base(opt)
         {
 
         }

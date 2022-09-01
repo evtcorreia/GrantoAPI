@@ -1,4 +1,5 @@
-﻿using Granto.Models;
+﻿using Granto.Data;
+using Granto.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Granto.Controllers
@@ -9,15 +10,18 @@ namespace Granto.Controllers
 
     public class UserController: ControllerBase
     {
-        private static List<User> users = new List<User>();
+        private AppGrantoContext _context;
 
-        private static int id = 1;
+            public UserController(AppGrantoContext context)
+        {
+            _context = context;
+        }
 
         [HttpPost]
         public IActionResult Adiciona([FromBody] User user)
         {
-            user.Id = id++;
-            users.Add(user);
+            _context.Users.Add(user);
+            _context.SaveChanges();
 
             return CreatedAtAction(nameof(getUser), new { Id = user.Id }, user);
         }
@@ -25,13 +29,15 @@ namespace Granto.Controllers
         [HttpGet]
         public IActionResult getUsers()
         {
-            return Ok(users);
+
+            
+            return Ok(_context.Users);
         }
 
         [HttpGet("{id}")]
         public IActionResult getUser(int id)
         {
-           User user = users.FirstOrDefault(user => user.Id == id);
+           User user = _context.Users.FirstOrDefault(user => user.Id == id);
 
             if(user != null)
             {
@@ -39,6 +45,45 @@ namespace Granto.Controllers
             }
 
             return NotFound();
+        }
+        [HttpPut("{id}")]
+        public IActionResult AtualizaUser(int id, [FromBody] User userAtualizado)
+        {
+            User user = _context.Users.FirstOrDefault(user => user.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.nome = userAtualizado.nome;
+            user.email = userAtualizado.email;
+            user.regiao = userAtualizado.regiao;
+
+            _context.SaveChanges();
+            
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeletaUser(int id)
+        {
+            User user = _context.Users.FirstOrDefault(user => user.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _context.Remove(user);
+            _context.SaveChanges();
+
+
+            return NoContent();
+
+
+
         }
 
         

@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddDbContext<Granto.Data.AppContext>(opts => opts.UseMySQL(builder.Configuration.GetConnectionString("GrantoConnection"), new MySqlServerVersion(new Version(8, 0))));
+builder.Services.AddDbContext<Granto.Data.AppContext>(opts => opts.UseMySql(builder.Configuration.GetConnectionString("GrantoConnection"), new MySqlServerVersion(new Version(8, 0))));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

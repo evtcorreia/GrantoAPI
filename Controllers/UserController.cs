@@ -7,20 +7,38 @@ namespace Granto.Controllers
     [ApiController]
     [Route("[controller]")]
 
-    public class UserController
+    public class UserController: ControllerBase
     {
         private static List<User> users = new List<User>();
 
+        private static int id = 1;
+
         [HttpPost]
-        public void Adiciona([FromBody] User user)
+        public IActionResult Adiciona([FromBody] User user)
         {
+            user.Id = id++;
             users.Add(user);
+
+            return CreatedAtAction(nameof(getUser), new { Id = user.Id }, user);
         }
 
         [HttpGet]
-        public IEnumerable<User> getUsers()
+        public IActionResult getUsers()
         {
-            return users;
+            return Ok(users);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult getUser(int id)
+        {
+           User user = users.FirstOrDefault(user => user.Id == id);
+
+            if(user != null)
+            {
+                return Ok(user);
+            }
+
+            return NotFound();
         }
 
         

@@ -22,8 +22,7 @@ namespace Granto.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     email = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    regiao = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    regiao = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

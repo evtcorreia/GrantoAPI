@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Granto.Migrations
 {
     [DbContext(typeof(AppGrantoContext))]
-    [Migration("20220901174707_CriandoTabelaUser")]
+    [Migration("20220901190713_CriandoTabelaUser")]
     partial class CriandoTabelaUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,9 +34,8 @@ namespace Granto.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("regiao")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("regiao")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

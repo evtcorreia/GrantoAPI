@@ -1,5 +1,6 @@
 ﻿using Granto.Data;
 using Granto.Models;
+using Granto.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Granto.Controllers
@@ -22,6 +23,8 @@ namespace Granto.Controllers
         {
             _context.Users.Add(user);
             _context.SaveChanges();
+
+            Console.WriteLine(((int)Regioes.CentroOeste)); 
 
             return CreatedAtAction(nameof(getUser), new { Id = user.Id }, user);
         }

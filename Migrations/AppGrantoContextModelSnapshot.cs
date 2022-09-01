@@ -32,9 +32,8 @@ namespace Granto.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("regiao")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("regiao")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

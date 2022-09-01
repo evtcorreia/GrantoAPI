@@ -19,17 +19,19 @@ namespace Granto.Controllers
         }
 
         [HttpPost]
+        [Route("/v1/user/insert")]
         public IActionResult Adiciona([FromBody] User user)
         {
             _context.Users.Add(user);
             _context.SaveChanges();
 
-            Console.WriteLine(((int)Regioes.CentroOeste)); 
+            
 
             return CreatedAtAction(nameof(getUser), new { Id = user.Id }, user);
         }
 
         [HttpGet]
+        [Route("/v1/users/all")]
         public IActionResult getUsers()
         {
 
@@ -37,7 +39,8 @@ namespace Granto.Controllers
             return Ok(_context.Users);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("/v1/user/{id:int}")]
         public IActionResult getUser(int id)
         {
            User user = _context.Users.FirstOrDefault(user => user.Id == id);
@@ -49,7 +52,8 @@ namespace Granto.Controllers
 
             return NotFound();
         }
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("/v1/user/update/{id:int}")]
         public IActionResult AtualizaUser(int id, [FromBody] User userAtualizado)
         {
             User user = _context.Users.FirstOrDefault(user => user.Id == id);
@@ -69,7 +73,8 @@ namespace Granto.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("/v1/user/delete/{id:int}")]
         public IActionResult DeletaUser(int id)
         {
             User user = _context.Users.FirstOrDefault(user => user.Id == id);

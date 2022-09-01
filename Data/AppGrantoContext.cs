@@ -11,5 +11,6 @@ namespace Granto.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Oportunidade> Oportunidades { get; set; }
     }
 }

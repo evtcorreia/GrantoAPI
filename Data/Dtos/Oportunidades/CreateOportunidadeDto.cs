@@ -1,27 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-using Granto.Models;
 
-namespace Granto.Models
+namespace Granto.Data.Dtos.Oportunidades
 {
-    public class Oportunidade
+    public class CreateOportunidadeDto
     {
 
-        [Key]
-        [Required(ErrorMessage = "UID is required")]
-        public int Id { get; set; }
+       
         [Required]
         [RegularExpression("[0-9]{2}-?[0-9]{3}-?[0-9]{3}/?[0-9]{4}-?[0-9]{2}",
-            ErrorMessage = "Informe um CNPJ válido...")]
+            ErrorMessage = "Informe um email válido...")]
         public string cnpj { get; set; }
         [Required]
         public string nome { get; set; }
         [Required]
         public float valor { get; set; }
-
-        [JsonIgnore]
-        public virtual User User { get; set; }
+        [Required]
         public int UserId { get; set; }
-        
     }
 }

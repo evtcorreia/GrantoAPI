@@ -1,4 +1,6 @@
-﻿using Granto.Data;
+﻿using AutoMapper;
+using Granto.Data;
+using Granto.Data.Dtos.User;
 using Granto.Models;
 using Granto.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -12,16 +14,21 @@ namespace Granto.Controllers
     public class UserController: ControllerBase
     {
         private AppGrantoContext _context;
+        private IMapper _mapper;
 
-            public UserController(AppGrantoContext context)
+            public UserController(AppGrantoContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpPost]
         [Route("/v1/user/insert")]
-        public IActionResult Adiciona([FromBody] User user)
+        public IActionResult Adiciona([FromBody] CreateUserDto userDto)
         {
+
+            User user = _mapper.Map<User>(userDto);
+
             _context.Users.Add(user);
             _context.SaveChanges();
 
@@ -35,6 +42,7 @@ namespace Granto.Controllers
         public IActionResult getUsers()
         {
 
+
             
             return Ok(_context.Users);
         }
@@ -45,6 +53,8 @@ namespace Granto.Controllers
         {
            User user = _context.Users.FirstOrDefault(user => user.Id == id);
 
+            ReadUserDto userDto = _mapper.Map<ReadUserDto>(user);
+
             if(user != null)
             {
                 return Ok(user);
@@ -54,7 +64,7 @@ namespace Granto.Controllers
         }
         [HttpPut]
         [Route("/v1/user/update/{id:int}")]
-        public IActionResult AtualizaUser(int id, [FromBody] User userAtualizado)
+        public IActionResult AtualizaUser(int id, [FromBody] UpdateUserDto userDto)
         {
             User user = _context.Users.FirstOrDefault(user => user.Id == id);
 
@@ -63,9 +73,7 @@ namespace Granto.Controllers
                 return NotFound();
             }
 
-            user.nome = userAtualizado.nome;
-            user.email = userAtualizado.email;
-            user.regiao = userAtualizado.regiao;
+            _mapper.Map(userDto, user);
 
             _context.SaveChanges();
             

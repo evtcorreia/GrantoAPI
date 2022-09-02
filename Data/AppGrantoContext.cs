@@ -10,6 +10,19 @@ namespace Granto.Data
 
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<User>()
+                .HasIndex(u=>u.email)
+                .IsUnique();
+
+            builder.Entity<Oportunidade>()
+                .HasOne(oportunidade => oportunidade.User)
+                .WithMany(user => user.Oportunidades)
+                .HasForeignKey(oportunidade => oportunidade.UserId);
+
+        }
+
         public DbSet<User> Users { get; set; }
         public DbSet<Oportunidade> Oportunidades { get; set; }
     }

@@ -33,3 +33,7 @@ D:\Dev\CSharp 2022\Granto\Granto\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.
 D:\Dev\CSharp 2022\Granto\Granto\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll
 D:\Dev\CSharp 2022\Granto\Granto\bin\Debug\net6.0\MySqlConnector.dll
 D:\Dev\CSharp 2022\Granto\Granto\bin\Debug\net6.0\Pomelo.EntityFrameworkCore.MySql.dll
+D:\Dev\CSharp 2022\Granto\Granto\bin\Debug\net6.0\AutoMapper.dll
+D:\Dev\CSharp 2022\Granto\Granto\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+D:\Dev\CSharp 2022\Granto\Granto\bin\Debug\net6.0\Castle.Core.dll
+D:\Dev\CSharp 2022\Granto\Granto\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Proxies.dll

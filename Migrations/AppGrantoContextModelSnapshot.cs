@@ -24,6 +24,9 @@ namespace Granto.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.Property<string>("cnpj")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -37,6 +40,8 @@ namespace Granto.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Oportunidades");
                 });
 
@@ -48,7 +53,7 @@ namespace Granto.Migrations
 
                     b.Property<string>("email")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("nome")
                         .IsRequired()
@@ -59,7 +64,26 @@ namespace Granto.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("email")
+                        .IsUnique();
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Granto.Models.Oportunidade", b =>
+                {
+                    b.HasOne("Granto.Models.User", "User")
+                        .WithMany("Oportunidades")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Granto.Models.User", b =>
+                {
+                    b.Navigation("Oportunidades");
                 });
 #pragma warning restore 612, 618
         }

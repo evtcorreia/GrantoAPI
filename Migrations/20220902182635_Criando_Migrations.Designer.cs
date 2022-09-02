@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Granto.Migrations
 {
     [DbContext(typeof(AppGrantoContext))]
-    [Migration("20220901214713_CriandoTabelaOportunidades")]
-    partial class CriandoTabelaOportunidades
+    [Migration("20220902182635_Criando_Migrations")]
+    partial class Criando_Migrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,6 +24,9 @@ namespace Granto.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.Property<string>("cnpj")
@@ -39,6 +42,8 @@ namespace Granto.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Oportunidades");
                 });
 
@@ -50,7 +55,7 @@ namespace Granto.Migrations
 
                     b.Property<string>("email")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("nome")
                         .IsRequired()
@@ -61,7 +66,26 @@ namespace Granto.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("email")
+                        .IsUnique();
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Granto.Models.Oportunidade", b =>
+                {
+                    b.HasOne("Granto.Models.User", "User")
+                        .WithMany("Oportunidades")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Granto.Models.User", b =>
+                {
+                    b.Navigation("Oportunidades");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,7 +1,8 @@
 ﻿namespace Granto.Models.Enums
 {
-    public enum Regioes : int
+    public enum Regioes
     {
+
         Norte = 1,
         Nordeste = 2,
         Sudeste = 3,

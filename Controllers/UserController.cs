@@ -42,9 +42,10 @@ namespace Granto.Controllers
         public IActionResult getUsers()
         {
 
+            var user = _context.Users.ToList();
 
-            
-            return Ok(_context.Users);
+
+            return Ok(user);
         }
 
         [HttpGet]

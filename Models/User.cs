@@ -17,6 +17,7 @@ namespace Granto.Models
         public string email { get; set; }
         [Required]
         public Regioes regiao { get; set; }
+        public DateTime dataUltimaOprtunidade { get; set; }
         public virtual List<Oportunidade> Oportunidades { get; set; }
 
 

@@ -3,6 +3,9 @@ using Granto.Data;
 using Granto.Data.Dtos.Oportunidades;
 using Granto.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System.Net.Http.Json;
 
 namespace Granto.Controllers
 {
@@ -49,25 +52,53 @@ namespace Granto.Controllers
         [Route("/v1/oportunidade/{id:int}")]
         public IActionResult getOportunidade(int id)
         {
-            Oportunidade oportunidade = _context.Oportunidades.FirstOrDefault(oportunidade => oportunidade.Id == id);
-            if(oportunidade != null)
-            {
-                return Ok(oportunidade);
-            }
+            //Oportunidade oportunidade = _context.Oportunidades.FirstOrDefault(oportunidade => oportunidade.Id == id);
+            //if(oportunidade != null)
+            //{
+                //return Ok(oportunidade);
+            //}
 
             return NotFound();
         }
+       
+
+
+
+
         [HttpGet]
         [Route("/v1/oportunidade/vendedor/{id:int}")]
-        public IActionResult SelecionaVendedor(int id)
+        public  async Task<object> GetCNPJ(int id)
         {
             Oportunidade oportunidade = _context.Oportunidades.FirstOrDefault(oportunidade => oportunidade.Id == id);
 
-            var cnpj = oportunidade.User.Oportunidades;
-            //string estado = oportunidade;
+            var httpClient = new HttpClient();
+            var request = new HttpRequestMessage();
+           
 
-            return Ok(cnpj);
+            
+           
+
+            var ret = await httpClient.GetAsync("https://publica.cnpj.ws/cnpj/20188753000180");
+           
+            var res = await ret.Content.ReadAsStreamAsync();
+            using var stremReader = new StreamReader(res);
+            using var jsonReader = new JsonTextReader(stremReader);
+
+            JsonSerializer serializer = new JsonSerializer();
+
+
+            var serializado = serializer.Deserialize<Root>(jsonReader);
+
+            Console.WriteLine(serializado);
+         
+            return serializado.estabelecimento.estado.ibge_id;
+
+
+
         }
+
+       
+       
 
 
     }

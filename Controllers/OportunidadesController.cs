@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Net.Http.Json;
+using System.Text.RegularExpressions;
 
 namespace Granto.Controllers
 {
@@ -32,19 +33,28 @@ namespace Granto.Controllers
         public async Task<object> Adiciona([FromBody] CreateOportunidadeDto oportunidadeDto)
         {
 
-            Oportunidade oportunidade = _mapper.Map<Oportunidade>(oportunidadeDto);
 
+            string cnpjRecebido = oportunidadeDto.cnpj;
+            string CNPJapenasNumeros = Regex.Replace(cnpjRecebido, "[^0-9]", "");
+            oportunidadeDto.cnpj = CNPJapenasNumeros;
+
+            
+
+            Oportunidade oportunidade = _mapper.Map<Oportunidade>(oportunidadeDto);
+           
+            string cnpj = oportunidade.cnpj.ToString();
+
+            var idUser = await GetCNPJ(cnpj);           
+
+            int valor = (int)idUser;
+            oportunidade.UserId = valor;
             _context.Oportunidades.Add(oportunidade);
             _context.SaveChanges();
 
             var ret = CreatedAtAction(nameof(getOportunidade), new { id = oportunidade.Id }, oportunidade);
-            string cnpj = oportunidade.cnpj.ToString();
-            var idUser = await GetCNPJ(cnpj);
-
-            int valor = (int)idUser;
 
             AtualizaUser(valor);      
-
+            
 
 
             return Ok(idUser);
@@ -114,53 +124,93 @@ namespace Granto.Controllers
 
 
             var ret = await httpClient.GetAsync("https://publica.cnpj.ws/cnpj/" + cnpj);
-           
+            if (ret == null)
+            {
+                System.Threading.Thread.Sleep(5 * 1000);
+            }
+
             var res = await ret.Content.ReadAsStreamAsync();
             using var stremReader = new StreamReader(res);
             using var jsonReader = new JsonTextReader(stremReader);
 
-            JsonSerializer serializer = new JsonSerializer();
 
+            try
+            {
+                var numeroRegiao = await SerializaEstado(jsonReader);
 
-            var serializado = serializer.Deserialize<Root>(jsonReader);
+                Task.FromResult(numeroRegiao);
+                Regioes regiao = (Regioes)numeroRegiao;
+                regiao.GetType().GetEnumName(regiao);
 
-            Console.WriteLine(serializado);
+                var user = _context.Users
+                    .Where(user => user.regiao == (Regioes)numeroRegiao)
+                    .ToList();
 
-            int numeroRegiao = serializado.estabelecimento.estado.ibge_id / 10;
-            Regioes regiao = (Regioes)2;
-            regiao.GetType().GetEnumName(regiao);            
-
-            var user = _context.Users
-                .Where(user => user.regiao == (Regioes)numeroRegiao)
-                .ToList();
-
-            int idUser = -1;
-            DateTime ultimaData = DateTime.Now;
-            foreach (var us in user){
-
-                
-
-                if(us.dataUltimaOprtunidade < ultimaData)
+                int idUser = -1;
+                DateTime ultimaData = DateTime.Now;
+                foreach (var us in user)
                 {
-                    idUser = us.Id;
-                    ultimaData = us.dataUltimaOprtunidade;
+
+                    int tempo = DateTime.Compare(us.dataUltimaOprtunidade, ultimaData);
+
+                    if (tempo < 0)
+                    {
+                        idUser = us.Id;
+                        ultimaData = us.dataUltimaOprtunidade;
+
+                    }
 
                 }
 
-            }            
+                return idUser;
 
-            return idUser;
+            }catch(System.NullReferenceException ex)
+            {
+                return NotFound();
+            }
+
+            
 
 
+            
+
+        }
+
+        private async Task<object> SerializaEstado(JsonReader jsonReader) {
+
+            JsonSerializer serializer = new JsonSerializer();
+
+
+
+            
+            int numero = 0;
+           
+                var serializado = serializer.Deserialize<Root>(jsonReader);
+                numero = serializado.estabelecimento.estado.ibge_id;
+                int numeroRegiao = numero / 10;
+                
+              
+
+                return numeroRegiao;
+         
+            
+            
+
+
+            //Console.WriteLine(serializado);
+
+            
 
 
 
         }
 
-       
 
-       
-       
+
+
+
+
+
 
 
     }

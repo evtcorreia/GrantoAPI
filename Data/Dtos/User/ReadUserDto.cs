@@ -1,4 +1,5 @@
-﻿using Granto.Models.Enums;
+﻿using Granto.Models;
+using Granto.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Granto.Data.Dtos.User
@@ -11,5 +12,6 @@ namespace Granto.Data.Dtos.User
         public string email { get; set; }
         [Required]
         public Regioes regiao { get; set; }
+        
     }
 }

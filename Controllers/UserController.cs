@@ -56,6 +56,9 @@ namespace Granto.Controllers
 
             ReadUserDto userDto = _mapper.Map<ReadUserDto>(user);
 
+
+
+
             if(user != null)
             {
                 return Ok(user);

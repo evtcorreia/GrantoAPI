@@ -120,10 +120,7 @@ namespace Granto.Controllers
 
 
             var ret = await httpClient.GetAsync("https://publica.cnpj.ws/cnpj/" + cnpj);
-            if (ret == null)
-            {
-                System.Threading.Thread.Sleep(5 * 1000);
-            }
+           
 
             var res = await ret.Content.ReadAsStreamAsync();
             using var stremReader = new StreamReader(res);

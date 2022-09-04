@@ -13,6 +13,9 @@ namespace Granto.Data.Dtos.User
         [Required]
         public Regioes regiao { get; set; }
         
-        public DateTime dataUltimaOprtunidade { get; set; } = DateTime.Now;
+        public DateTime dataUltimaOprtunidade { get; set; } =  DateTime.Now;
+
+
+
     }
 }

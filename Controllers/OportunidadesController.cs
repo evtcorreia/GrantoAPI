@@ -37,7 +37,6 @@ namespace Granto.Controllers
             string cnpjRecebido = oportunidadeDto.cnpj;
             string CNPJapenasNumeros = Regex.Replace(cnpjRecebido, "[^0-9]", "");
             oportunidadeDto.cnpj = CNPJapenasNumeros;
-
             
 
             Oportunidade oportunidade = _mapper.Map<Oportunidade>(oportunidadeDto);
@@ -111,9 +110,6 @@ namespace Granto.Controllers
             return NotFound();
         }
 
-
-
-
         [HttpGet]
         [Route("/v1/oportunidade/vendedor/{id:int}")]
         public  async Task<object> GetCNPJ(string cnpj)
@@ -167,12 +163,7 @@ namespace Granto.Controllers
             }catch(System.NullReferenceException ex)
             {
                 return NotFound();
-            }
-
-            
-
-
-            
+            }            
 
         }
 
@@ -192,26 +183,9 @@ namespace Granto.Controllers
               
 
                 return numeroRegiao;
-         
-            
-            
-
-
-            //Console.WriteLine(serializado);
-
-            
-
 
 
         }
-
-
-
-
-
-
-
-
 
     }
 }
